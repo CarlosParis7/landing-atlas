@@ -107,11 +107,18 @@
   .nav-links a.link:hover { color: var(--ink); }
   @media (max-width: 820px) { .nav-links .link { display: none; } }
 
-  /* Language toggle */
-  .lang { display: inline-flex; align-items: center; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 999px; padding: 2px; box-shadow: var(--shadow-sm); }
-  .lang button { font: 700 0.76rem/1 'Inter', sans-serif; letter-spacing: 0.02em; color: var(--ink-3); background: none; border: none; cursor: pointer; padding: 6px 11px; border-radius: 999px; transition: color .15s var(--ease), background-color .15s var(--ease); }
+  /* Language toggle (floating) */
+  .lang { display: inline-flex; align-items: center; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px; box-shadow: var(--shadow-sm); }
+  .lang button { font: 700 0.78rem/1 'Inter', sans-serif; letter-spacing: 0.02em; color: var(--ink-3); background: none; border: none; cursor: pointer; padding: 7px 13px; border-radius: 999px; transition: color .15s var(--ease), background-color .15s var(--ease); }
   .lang button:hover { color: var(--ink); }
   .lang button[aria-pressed="true"] { background: var(--ink-deep); color: var(--ink-on-accent); }
+  .lang-float {
+    position: fixed; right: clamp(16px, 3vw, 28px); bottom: clamp(16px, 3vw, 28px); z-index: var(--z-toast);
+    background: oklch(1 0 0 / 0.85); backdrop-filter: saturate(180%) blur(12px); -webkit-backdrop-filter: saturate(180%) blur(12px);
+    box-shadow: var(--shadow-lg); animation: lang-in .5s var(--ease) both;
+  }
+  @keyframes lang-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .lang-float { animation: none; } }
 
   /* ============ HERO : the document that answers ============ */
   .hero { padding: clamp(48px, 7vw, 84px) 0 clamp(56px, 8vw, 96px); position: relative; }
@@ -331,12 +338,24 @@
   .form-ok { display: none; text-align: center; padding: 22px; background: var(--accent-soft); border: 1px solid oklch(0.62 0.15 162 / 0.25); border-radius: var(--radius); color: var(--accent-press); font-weight: 600; }
 
   /* ---------- Footer ---------- */
-  footer { padding: 46px 0; border-top: 1px solid var(--line); }
-  .foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; }
-  .foot p { color: var(--ink-3); font-size: 0.86rem; }
-  .foot-links { display: flex; gap: 22px; }
-  .foot-links a { color: var(--ink-2); font-size: 0.88rem; transition: color .15s var(--ease); }
-  .foot-links a:hover { color: var(--ink); }
+  footer { background: var(--ink-deep); color: oklch(0.78 0.012 200); }
+  .foot-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: clamp(28px, 4vw, 56px); padding: clamp(48px, 6vw, 72px) 0 clamp(36px, 4vw, 48px); }
+  @media (max-width: 860px) { .foot-top { grid-template-columns: 1fr 1fr; gap: 36px 28px; } }
+  @media (max-width: 480px) { .foot-top { grid-template-columns: 1fr; } }
+  .foot-brand .brand { color: oklch(0.98 0.005 175); margin-bottom: 14px; }
+  .foot-brand .logo { box-shadow: none; }
+  .foot-tag { font-size: 0.92rem; line-height: 1.6; color: oklch(0.7 0.012 200); max-width: 34ch; margin-bottom: 20px; }
+  .foot-cta { display: inline-flex; align-items: center; gap: 7px; font-size: 0.9rem; font-weight: 600; color: var(--accent); transition: gap .18s var(--ease); }
+  .foot-cta:hover { gap: 11px; }
+  .foot-cta svg { width: 15px; height: 15px; }
+  .foot-col h5 { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: oklch(0.6 0.012 200); margin-bottom: 16px; }
+  .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+  .foot-col a { color: oklch(0.78 0.012 200); font-size: 0.92rem; transition: color .15s var(--ease); }
+  .foot-col a:hover { color: oklch(0.98 0.005 175); }
+  .foot-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 22px 0 32px; border-top: 1px solid oklch(1 0 0 / 0.1); }
+  .foot-bottom p { color: oklch(0.62 0.012 200); font-size: 0.84rem; }
+  .foot-made { display: inline-flex; align-items: center; gap: 7px; }
+  .foot-made .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px oklch(0.62 0.15 162 / 0.25); }
 
   /* ---------- Reveal (enhances visible content) ---------- */
   /* Reveal: content is visible by default; only hidden once JS confirms
@@ -351,6 +370,11 @@
 </head>
 <body>
 
+<div class="lang lang-float" role="group" aria-label="Idioma / Language">
+  <button type="button" data-lang="es" aria-pressed="true">ES</button>
+  <button type="button" data-lang="en" aria-pressed="false">EN</button>
+</div>
+
 <header id="hdr">
   <div class="wrap nav">
     <a href="#top" class="brand">
@@ -362,10 +386,6 @@
       <a href="#how" class="link" data-i18n="nav.how">Cómo funciona</a>
       <a href="#precios" class="link" data-i18n="nav.pricing">Precios</a>
       <a href="#faq" class="link" data-i18n="nav.faq">FAQ</a>
-      <div class="lang" role="group" aria-label="Idioma / Language">
-        <button type="button" data-lang="es" aria-pressed="true">ES</button>
-        <button type="button" data-lang="en" aria-pressed="false">EN</button>
-      </div>
       <a href="#demo" class="btn btn-primary" data-i18n="nav.cta">Agendar demo</a>
     </nav>
   </div>
@@ -701,10 +721,43 @@
 </main>
 
 <footer>
-  <div class="wrap foot">
-    <a href="#top" class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v6c0 4.4 3.4 7.6 8 8 4.6-.4 8-3.6 8-8V7z"/><path d="m9 12 2 2 4-4"/></svg></span> Atlas Copilot</a>
-    <div class="foot-links"><a href="#casos" data-i18n="nav.cases">Casos de uso</a><a href="#precios" data-i18n="nav.pricing">Precios</a><a href="#faq" data-i18n="nav.faq">FAQ</a><a href="#demo" data-i18n="nav.cta">Agendar demo</a></div>
-    <p>© 2026 ByteLabs</p>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="#top" class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v6c0 4.4 3.4 7.6 8 8 4.6-.4 8-3.6 8-8V7z"/><path d="m9 12 2 2 4-4"/></svg></span> Atlas Copilot</a>
+        <p class="foot-tag" data-i18n="foot.tag">Cada respuesta de tu empresa, con el documento y la página exactos de donde vino. IA verificable para equipos reales.</p>
+        <a href="#demo" class="foot-cta" data-i18n-html="foot.cta">Agendar una demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="foot-col">
+        <h5 data-i18n="foot.product">Producto</h5>
+        <ul>
+          <li><a href="#casos" data-i18n="nav.cases">Casos de uso</a></li>
+          <li><a href="#value" data-i18n="foot.why">Por qué Atlas</a></li>
+          <li><a href="#how" data-i18n="nav.how">Cómo funciona</a></li>
+          <li><a href="#precios" data-i18n="nav.pricing">Precios</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5 data-i18n="foot.company">Empresa</h5>
+        <ul>
+          <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
+          <li><a href="#demo" data-i18n="nav.cta">Agendar demo</a></li>
+          <li><a href="mailto:carlosparis391@gmail.com" data-i18n="foot.contact">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5 data-i18n="foot.legal">Legal</h5>
+        <ul>
+          <li><a href="#" data-i18n="foot.privacy">Privacidad</a></li>
+          <li><a href="#" data-i18n="foot.terms">Términos</a></li>
+          <li><a href="#" data-i18n="foot.security">Seguridad de datos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <p>© 2026 ByteLabs. <span data-i18n="foot.rights">Todos los derechos reservados.</span></p>
+      <p class="foot-made"><span class="dot" aria-hidden="true"></span><span data-i18n="foot.made">Construido por ByteLabs · Soporte en español e inglés</span></p>
+    </div>
   </div>
 </footer>
 
@@ -785,7 +838,12 @@
     'cta.l1': 'Personalized demo with your own documents', 'cta.l2': 'Data isolation and security explained in depth', 'cta.l3': 'No commitment and no credit card',
     'form.name': 'Name', 'form.name.ph': 'Your name', 'form.company': 'Company', 'form.company.ph': 'Your company name', 'form.email': 'Work email', 'form.email.ph': 'you@company.com',
     'form.msg': 'What would you like to solve? <span style="font-weight:400;color:var(--ink-3)">(optional)</span>', 'form.msg.ph': 'E.g.: let the team check our internal policies without wasting time.',
-    'form.submit': 'Request demo', 'form.note': 'We reply within 24 business hours.', 'form.ok': 'Thanks. Your email opened with the request ready to send.'
+    'form.submit': 'Request demo', 'form.note': 'We reply within 24 business hours.', 'form.ok': 'Thanks. Your email opened with the request ready to send.',
+    'foot.tag': 'Every answer from your company, with the exact document and page it came from. Verifiable AI for real teams.',
+    'foot.cta': 'Book a demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    'foot.product': 'Product', 'foot.why': 'Why Atlas', 'foot.company': 'Company', 'foot.contact': 'Contact',
+    'foot.legal': 'Legal', 'foot.privacy': 'Privacy', 'foot.terms': 'Terms', 'foot.security': 'Data security',
+    'foot.rights': 'All rights reserved.', 'foot.made': 'Built by ByteLabs · Support in English and Spanish'
   };
   const ERRORS = {
     es: { name: 'Dinos tu nombre.', company: 'Indica el nombre de tu empresa.', emailEmpty: 'Necesitamos un email para responderte.', emailBad: 'Revisa el email: parece incompleto.' },
