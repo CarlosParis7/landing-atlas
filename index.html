@@ -6,9 +6,21 @@
 <title>Atlas Copilot — La respuesta, con la página exacta de dónde vino</title>
 <meta name="description" content="Atlas Copilot lee los documentos de tu empresa y responde con la cita exacta: documento y página. RAG empresarial con aislamiento estricto por empresa." />
 
-<meta property="og:title" content="Atlas Copilot — Cada respuesta, con su fuente" />
-<meta property="og:description" content="Chatea con tu documentación interna. La respuesta llega con el documento y la página exactos. Verificable, no adivinado." />
+<link rel="canonical" href="https://landing-atlas-pi.vercel.app/" />
+<meta name="theme-color" content="#0c1311" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2316a06f'/%3E%3Cpath d='M12 3 4 7v6c0 4.4 3.4 7.6 8 8 4.6-.4 8-3.6 8-8V7z' fill='none' stroke='white' stroke-width='2.2' stroke-linejoin='round'/%3E%3Cpath d='m9 12 2 2 4-4' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+<meta property="og:title" content="Atlas Copilot — Every answer, with its source" />
+<meta property="og:description" content="Chat with your internal documentation. The answer arrives with the exact document and page. Verifiable, not guessed." />
 <meta property="og:type" content="website" />
+<meta property="og:url" content="https://landing-atlas-pi.vercel.app/" />
+<meta property="og:image" content="https://landing-atlas-pi.vercel.app/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Atlas Copilot — Every answer, with its source" />
+<meta name="twitter:description" content="Chat with your internal documentation. The answer arrives with the exact document and page. Verifiable, not guessed." />
+<meta name="twitter:image" content="https://landing-atlas-pi.vercel.app/og-image.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -230,18 +242,6 @@
   .uc .ex { display: block; margin-top: 13px; font-style: italic; color: var(--accent-press); font-size: 0.88rem; }
 
   /* ---------- Testimonials ---------- */
-  .quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  @media (max-width: 880px) { .quotes { grid-template-columns: 1fr; } }
-  .quote { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 28px 26px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; }
-  .quote .stars { display: flex; gap: 3px; color: var(--accent); margin-bottom: 14px; }
-  .quote .stars svg { width: 16px; height: 16px; }
-  .quote blockquote { font-size: 1.02rem; line-height: 1.55; color: var(--ink); margin-bottom: 20px; flex: 1; }
-  .quote .by { display: flex; align-items: center; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line); }
-  .quote .av { width: 42px; height: 42px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-press); display: grid; place-items: center; font-weight: 700; font-size: 0.95rem; flex-shrink: 0; }
-  .quote .by b { font-size: 0.92rem; display: block; }
-  .quote .by span { font-size: 0.83rem; color: var(--ink-3); }
-  .ph-tip { text-align: center; margin-top: 22px; font-size: 0.85rem; color: var(--ink-3); }
-
   /* ---------- Early access (founding customers) ---------- */
   .early { background: var(--accent-soft); border: 1px solid oklch(0.62 0.15 162 / 0.25); border-radius: 22px; padding: clamp(36px, 5vw, 60px); text-align: center; max-width: 920px; margin: 0 auto; }
   .early-badge { display: inline-flex; align-items: center; gap: 7px; background: var(--surface); color: var(--accent-press); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 6px 13px; border-radius: 999px; border: 1px solid oklch(0.62 0.15 162 / 0.25); margin-bottom: 20px; }
@@ -818,7 +818,6 @@
     'foot.tag': 'Every answer from your company, with the exact document and page it came from. Verifiable AI for real teams.',
     'foot.cta': 'Book a demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
     'foot.product': 'Product', 'foot.why': 'Why Atlas', 'foot.company': 'Company', 'foot.contact': 'Contact',
-    'foot.legal': 'Legal', 'foot.privacy': 'Privacy', 'foot.terms': 'Terms', 'foot.security': 'Data security',
     'foot.rights': 'All rights reserved.', 'foot.made': 'Built by ByteLabs · Support in English and Spanish'
   };
   const ERRORS = {
