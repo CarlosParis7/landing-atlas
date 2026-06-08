@@ -367,6 +367,64 @@
   .foot-made { display: inline-flex; align-items: center; gap: 7px; }
   .foot-made .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px oklch(0.62 0.15 162 / 0.25); }
 
+  /* ---------- Chat demo (floating) ---------- */
+  .chat-fab {
+    position: fixed; right: clamp(16px, 3vw, 26px); bottom: clamp(16px, 3vw, 26px); z-index: var(--z-toast);
+    display: inline-flex; align-items: center; gap: 10px; padding: 13px 18px 13px 14px; border: none; cursor: pointer;
+    background: var(--accent); color: var(--ink-on-accent); border-radius: 999px; box-shadow: var(--shadow-lg);
+    font: 600 0.92rem/1 'Inter', sans-serif; transition: background-color .18s var(--ease), transform .18s var(--ease), box-shadow .18s var(--ease);
+  }
+  .chat-fab:hover { background: var(--accent-hover); transform: translateY(-2px); }
+  .chat-fab svg { width: 21px; height: 21px; }
+  .chat-fab .fab-ping { position: absolute; top: -3px; right: -3px; width: 13px; height: 13px; border-radius: 50%; background: oklch(0.55 0.2 27); border: 2px solid var(--canvas); }
+  .chat-fab.hidden { opacity: 0; transform: scale(.85) translateY(10px); pointer-events: none; }
+  @media (max-width: 480px) { .chat-fab .fab-label { display: none; } .chat-fab { padding: 14px; } }
+
+  .chat-panel {
+    position: fixed; right: clamp(12px, 3vw, 26px); bottom: clamp(12px, 3vw, 26px); z-index: var(--z-toast);
+    width: min(384px, calc(100vw - 24px)); height: min(580px, calc(100dvh - 96px));
+    display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 20px; box-shadow: var(--shadow-paper); overflow: hidden;
+    opacity: 0; transform: translateY(16px) scale(.98); transform-origin: bottom right; pointer-events: none;
+    transition: opacity .26s var(--ease), transform .26s var(--ease);
+  }
+  .chat-panel.open { opacity: 1; transform: none; pointer-events: auto; }
+  @media (prefers-reduced-motion: reduce) { .chat-panel, .chat-fab { transition: opacity .15s linear; } }
+
+  .chat-head { display: flex; align-items: center; gap: 11px; padding: 15px 16px; background: var(--ink-deep); color: oklch(0.98 0.005 175); }
+  .chat-head .ava { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--accent), var(--accent-press)); display: grid; place-items: center; flex-shrink: 0; }
+  .chat-head .ava svg { width: 21px; height: 21px; }
+  .chat-head .ht { display: flex; flex-direction: column; line-height: 1.3; flex: 1; min-width: 0; }
+  .chat-head .ht b { font-size: 0.95rem; }
+  .chat-head .ht span { font-size: 0.76rem; color: oklch(0.75 0.012 200); display: inline-flex; align-items: center; gap: 6px; }
+  .chat-head .ht .live { width: 7px; height: 7px; border-radius: 50%; background: oklch(0.72 0.17 150); box-shadow: 0 0 0 0 oklch(0.72 0.17 150 / 0.5); animation: pulse 2.2s var(--ease) infinite; }
+  .chat-head .x { background: oklch(1 0 0 / 0.1); border: none; color: inherit; cursor: pointer; width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; transition: background-color .15s var(--ease); }
+  .chat-head .x:hover { background: oklch(1 0 0 / 0.2); }
+  .chat-head .x svg { width: 17px; height: 17px; }
+
+  .chat-body { flex: 1; overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; background: var(--surface-2); }
+  .msg { max-width: 84%; font-size: 0.92rem; line-height: 1.5; padding: 11px 14px; border-radius: 14px; }
+  .msg.bot { align-self: flex-start; background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 5px; color: var(--ink); box-shadow: var(--shadow-sm); }
+  .msg.user { align-self: flex-end; background: var(--accent); color: var(--ink-on-accent); border-bottom-right-radius: 5px; }
+  .msg .cite { display: inline-flex; align-items: center; gap: 6px; margin-top: 9px; background: var(--accent-soft); color: var(--accent-press); font-size: 0.74rem; font-weight: 600; padding: 5px 9px; border-radius: 8px; border: 1px solid oklch(0.62 0.15 162 / 0.2); }
+  .msg .cite svg { width: 12px; height: 12px; flex-shrink: 0; }
+  .chat-typing { align-self: flex-start; display: inline-flex; gap: 4px; padding: 13px 15px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; border-bottom-left-radius: 5px; }
+  .chat-typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-3); animation: typing 1.2s var(--ease) infinite; }
+  .chat-typing i:nth-child(2) { animation-delay: .15s; } .chat-typing i:nth-child(3) { animation-delay: .3s; }
+  @keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+  .chat-suist { padding: 0 16px 8px; display: flex; flex-wrap: wrap; gap: 7px; background: var(--surface-2); }
+  .chat-chip { font: 500 0.82rem/1 'Inter', sans-serif; color: var(--accent-press); background: var(--surface); border: 1px solid oklch(0.62 0.15 162 / 0.3); border-radius: 999px; padding: 8px 12px; cursor: pointer; transition: background-color .15s var(--ease), transform .12s var(--ease); }
+  .chat-chip:hover { background: var(--accent-soft); }
+  .chat-chip:active { transform: scale(.96); }
+
+  .chat-foot { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--line); background: var(--surface); }
+  .chat-foot input { flex: 1; font: 400 0.92rem/1.4 'Inter', sans-serif; color: var(--ink); background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 999px; padding: 11px 15px; transition: border-color .15s var(--ease), box-shadow .15s var(--ease); }
+  .chat-foot input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
+  .chat-foot button { flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; border: none; background: var(--accent); color: var(--ink-on-accent); cursor: pointer; display: grid; place-items: center; transition: background-color .15s var(--ease); }
+  .chat-foot button:hover { background: var(--accent-hover); }
+  .chat-foot button svg { width: 18px; height: 18px; }
+
   /* ---------- Reveal (enhances visible content) ---------- */
   /* Reveal: content is visible by default; only hidden once JS confirms
      it will animate it in (guards against headless/no-JS blank sections). */
@@ -410,7 +468,7 @@
         <p class="lede" data-i18n="hero.lede">Sube los manuales, políticas y contratos de tu empresa. Cualquier empleado escribe una pregunta como en WhatsApp y recibe la respuesta al instante, con la página exacta del documento donde está. Sin buscar entre archivos ni preguntarle a tres personas.</p>
         <div class="hero-cta">
           <a href="#demo" class="btn btn-primary" data-i18n="hero.cta1">Agendar una demo</a>
-          <a href="#value" class="btn btn-ghost" data-i18n="hero.cta2">Ver cómo responde</a>
+          <a href="#value" class="btn btn-ghost" id="seeAnswer" data-i18n="hero.cta2">Ver cómo responde</a>
         </div>
         <p class="hero-note">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
@@ -714,6 +772,27 @@
 
 </main>
 
+<!-- ============ CHAT DEMO (floating) ============ -->
+<button class="chat-fab" id="chatFab" aria-label="Probar el demo de Atlas" aria-expanded="false">
+  <span class="fab-ping" aria-hidden="true"></span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  <span class="fab-label" data-i18n="chat.fab">Pruébalo</span>
+</button>
+
+<div class="chat-panel" id="chatPanel" role="dialog" aria-modal="false" aria-label="Demo de Atlas Copilot">
+  <div class="chat-head">
+    <span class="ava" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v6c0 4.4 3.4 7.6 8 8 4.6-.4 8-3.6 8-8V7z"/><path d="m9 12 2 2 4-4"/></svg></span>
+    <span class="ht"><b>Atlas Copilot</b><span><span class="live" aria-hidden="true"></span><span data-i18n="chat.status">Demo · responde sobre un manual de ejemplo</span></span></span>
+    <button class="x" id="chatClose" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="chat-body" id="chatBody" aria-live="polite"></div>
+  <div class="chat-suist" id="chatSug"></div>
+  <form class="chat-foot" id="chatForm">
+    <input type="text" id="chatInput" autocomplete="off" placeholder="Escribe tu pregunta…" data-i18n-placeholder="chat.ph" aria-label="Escribe tu pregunta" />
+    <button type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+  </form>
+</div>
+
 <footer>
   <div class="wrap">
     <div class="foot-top">
@@ -829,7 +908,8 @@
     'foot.tag': 'Every answer from your company, with the exact document and page it came from. Verifiable AI for real teams.',
     'foot.cta': 'Book a demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
     'foot.product': 'Product', 'foot.why': 'Why Atlas', 'foot.company': 'Company', 'foot.contact': 'Contact',
-    'foot.rights': 'All rights reserved.', 'foot.made': 'Built by ByteLabs · Support in English and Spanish'
+    'foot.rights': 'All rights reserved.', 'foot.made': 'Built by ByteLabs · Support in English and Spanish',
+    'chat.fab': 'Try it', 'chat.status': 'Demo · answers from a sample handbook', 'chat.ph': 'Type your question…'
   };
   const ERRORS = {
     es: { name: 'Dinos tu nombre.', company: 'Indica el nombre de tu empresa.', emailEmpty: 'Necesitamos un email para responderte.', emailBad: 'Revisa el email: parece incompleto.' },
@@ -924,6 +1004,122 @@
     window.location.href = 'mailto:carlosparis391@gmail.com?subject=' + subject + '&body=' + body;
     form.style.display = 'none'; formOk.style.display = 'block';
   });
+
+  /* ---------- Chat demo (scripted, bilingual) ---------- */
+  (function () {
+    const fab = document.getElementById('chatFab'), panel = document.getElementById('chatPanel');
+    const closeBtn = document.getElementById('chatClose'), body = document.getElementById('chatBody');
+    const sug = document.getElementById('chatSug'), cForm = document.getElementById('chatForm'), input = document.getElementById('chatInput');
+
+    // Knowledge base built from the sample HR handbook shown in the hero.
+    const KB = {
+      es: {
+        intro: '¡Hola! Soy Atlas. Pregúntame sobre el Manual de RRHH de ejemplo y te respondo con la página exacta. Prueba una de estas:',
+        cite: 'Manual_RRHH_2026.pdf',
+        fallback: 'En el demo solo cargué un manual de RRHH de ejemplo, así que esa no la tengo. Con tus documentos reales, Atlas responde igual de preciso. ¿Agendamos una demo?',
+        cta: 'Agendar una demo',
+        qs: [
+          { q: '¿Cuántos días de vacaciones tengo?', a: 'Tienes <b>15 días hábiles</b> de vacaciones al año, que suben a <b>20 tras 5 años</b> de antigüedad. Se acumulan mensualmente.', p: 'pág. 12' },
+          { q: '¿Puedo arrastrar días al año siguiente?', a: 'Sí. Los días no tomados se pueden arrastrar hasta un <b>máximo de 10</b> al período siguiente, con autorización de tu líder directo.', p: 'pág. 12' },
+          { q: '¿Aplica al personal de medio tiempo?', a: 'El derecho a descanso remunerado aplica a <b>todo el personal de tiempo completo</b>. Para medio tiempo, el manual de ejemplo no lo detalla.', p: 'pág. 11' }
+        ]
+      },
+      en: {
+        intro: "Hi! I'm Atlas. Ask me about the sample HR Handbook and I'll answer with the exact page. Try one of these:",
+        cite: 'HR_Handbook_2026.pdf',
+        fallback: "In this demo I only loaded a sample HR handbook, so I don't have that one. With your real documents, Atlas answers just as precisely. Shall we book a demo?",
+        cta: 'Book a demo',
+        qs: [
+          { q: 'How many vacation days do I get?', a: 'You get <b>15 business days</b> of vacation per year, rising to <b>20 after 5 years</b> of tenure. They accrue monthly.', p: 'p. 12' },
+          { q: 'Can I carry days into next year?', a: 'Yes. Unused days carry over up to a <b>maximum of 10</b> into the next period, with your direct manager’s approval.', p: 'p. 12' },
+          { q: 'Does it apply to part-time staff?', a: 'Paid rest applies to <b>all full-time staff</b>. For part-time, the sample handbook does not specify.', p: 'p. 11' }
+        ]
+      }
+    };
+
+    let started = false, busy = false;
+    const kb = () => KB[LANG] || KB.es;
+
+    const scroll = () => { body.scrollTop = body.scrollHeight; };
+    const addMsg = (who, html) => {
+      const d = document.createElement('div');
+      d.className = 'msg ' + who; d.innerHTML = html; body.appendChild(d); scroll(); return d;
+    };
+    const citeChip = (p) => '<div class="cite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>' + kb().cite + ' · ' + p + '</div>';
+
+    const renderChips = () => {
+      sug.innerHTML = '';
+      kb().qs.forEach(item => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'chat-chip'; b.textContent = item.q;
+        b.addEventListener('click', () => ask(item.q));
+        sug.appendChild(b);
+      });
+    };
+
+    const typing = () => {
+      const t = document.createElement('div');
+      t.className = 'chat-typing'; t.innerHTML = '<i></i><i></i><i></i>'; body.appendChild(t); scroll(); return t;
+    };
+
+    const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const match = (text) => {
+      const t = norm(text);
+      let best = null, score = 0;
+      kb().qs.forEach(item => {
+        const words = norm(item.q).split(/\W+/).filter(w => w.length > 3);
+        const hits = words.filter(w => t.includes(w)).length;
+        if (hits > score) { score = hits; best = item; }
+      });
+      // keyword shortcuts
+      if (!best || score === 0) {
+        if (/vacac|dias|days|vacation/.test(t)) best = kb().qs[0];
+        else if (/arrastr|carry|acumul|next year|siguiente/.test(t)) best = kb().qs[1];
+        else if (/medio tiempo|part.?time|tiempo completo|full.?time/.test(t)) best = kb().qs[2];
+      }
+      return best;
+    };
+
+    const answer = (item) => {
+      busy = true;
+      const t = typing();
+      setTimeout(() => {
+        t.remove();
+        if (item) addMsg('bot', item.a + citeChip(item.p));
+        else addMsg('bot', kb().fallback + '<div style="margin-top:10px"><a href="#demo" class="cite" style="text-decoration:none" data-chat-cta>➜ ' + kb().cta + '</a></div>');
+        const cta = body.querySelector('[data-chat-cta]');
+        if (cta) cta.addEventListener('click', close);
+        busy = false;
+      }, 750 + Math.random() * 500);
+    };
+
+    const ask = (text) => {
+      if (busy) return;
+      addMsg('user', text.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])));
+      answer(match(text));
+    };
+
+    const start = () => {
+      if (started) return; started = true;
+      const t = typing();
+      setTimeout(() => { t.remove(); addMsg('bot', kb().intro); renderChips(); }, 600);
+    };
+
+    const open = () => {
+      panel.classList.add('open'); fab.classList.add('hidden'); fab.setAttribute('aria-expanded', 'true');
+      start(); setTimeout(() => input.focus(), 300);
+    };
+    function close() {
+      panel.classList.remove('open'); fab.classList.remove('hidden'); fab.setAttribute('aria-expanded', 'false');
+    }
+
+    fab.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && panel.classList.contains('open')) close(); });
+    cForm.addEventListener('submit', (e) => { e.preventDefault(); const v = input.value.trim(); if (!v) return; input.value = ''; ask(v); });
+    const see = document.getElementById('seeAnswer');
+    if (see) see.addEventListener('click', (e) => { e.preventDefault(); open(); });
+  })();
 </script>
 </body>
 </html>
