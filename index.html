@@ -119,6 +119,17 @@
   .nav-links a.link:hover { color: var(--ink); }
   @media (max-width: 820px) { .nav-links .link { display: none; } }
 
+  /* Text-roll hover (letters flip on hover) */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .roll-clip { position: relative; display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom; line-height: 1.15; }
+  .roll-top, .roll-bot { display: block; }
+  .roll-bot { position: absolute; left: 0; top: 0; }
+  .roll-l { display: inline-block; transition: transform .42s var(--ease); will-change: transform; }
+  .roll-bot .roll-l { transform: translateY(105%); }
+  a:hover .roll-top .roll-l { transform: translateY(-105%); }
+  a:hover .roll-bot .roll-l { transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .roll-l { transition: none; } }
+
   /* ============ HERO : the document that answers ============ */
   .hero { padding: clamp(48px, 7vw, 84px) 0 clamp(56px, 8vw, 96px); position: relative; }
   .hero-grid { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: clamp(36px, 5vw, 76px); align-items: center; }
@@ -851,6 +862,24 @@
     if (saved === 'en' || saved === 'es') initial = saved;
   } catch (_) {}
   setLang(initial);
+
+  /* ---------- Text-roll hover (vanilla) ---------- */
+  const esc = (s) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const buildRoll = (el) => {
+    const text = el.textContent.trim();
+    if (!text) return;
+    const layer = (cls) => {
+      let h = '<span class="' + cls + '">';
+      [...text].forEach((ch, i) => {
+        h += '<span class="roll-l" style="transition-delay:' + (i * 0.022).toFixed(3) + 's">' + (ch === ' ' ? '&nbsp;' : esc(ch)) + '</span>';
+      });
+      return h + '</span>';
+    };
+    el.innerHTML = '<span class="roll-clip" aria-hidden="true">' + layer('roll-top') + layer('roll-bot') + '</span><span class="sr-only">' + esc(text) + '</span>';
+  };
+  if (window.matchMedia('(hover: hover)').matches) {
+    document.querySelectorAll('.nav-links a.link, .foot-col a').forEach(buildRoll);
+  }
 
   const form = document.getElementById('demoForm'), formOk = document.getElementById('formOk');
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
