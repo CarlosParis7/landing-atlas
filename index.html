@@ -107,18 +107,11 @@
   .nav-links a.link:hover { color: var(--ink); }
   @media (max-width: 820px) { .nav-links .link { display: none; } }
 
-  /* Language toggle (floating) */
-  .lang { display: inline-flex; align-items: center; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px; box-shadow: var(--shadow-sm); }
-  .lang button { font: 700 0.78rem/1 'Inter', sans-serif; letter-spacing: 0.02em; color: var(--ink-3); background: none; border: none; cursor: pointer; padding: 7px 13px; border-radius: 999px; transition: color .15s var(--ease), background-color .15s var(--ease); }
+  /* Language toggle */
+  .lang { display: inline-flex; align-items: center; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 999px; padding: 2px; box-shadow: var(--shadow-sm); }
+  .lang button { font: 700 0.76rem/1 'Inter', sans-serif; letter-spacing: 0.02em; color: var(--ink-3); background: none; border: none; cursor: pointer; padding: 6px 11px; border-radius: 999px; transition: color .15s var(--ease), background-color .15s var(--ease); }
   .lang button:hover { color: var(--ink); }
   .lang button[aria-pressed="true"] { background: var(--ink-deep); color: var(--ink-on-accent); }
-  .lang-float {
-    position: fixed; right: clamp(16px, 3vw, 28px); bottom: clamp(16px, 3vw, 28px); z-index: var(--z-toast);
-    background: oklch(1 0 0 / 0.85); backdrop-filter: saturate(180%) blur(12px); -webkit-backdrop-filter: saturate(180%) blur(12px);
-    box-shadow: var(--shadow-lg); animation: lang-in .5s var(--ease) both;
-  }
-  @keyframes lang-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .lang-float { animation: none; } }
 
   /* ============ HERO : the document that answers ============ */
   .hero { padding: clamp(48px, 7vw, 84px) 0 clamp(56px, 8vw, 96px); position: relative; }
@@ -370,11 +363,6 @@
 </head>
 <body>
 
-<div class="lang lang-float" role="group" aria-label="Idioma / Language">
-  <button type="button" data-lang="es" aria-pressed="true">ES</button>
-  <button type="button" data-lang="en" aria-pressed="false">EN</button>
-</div>
-
 <header id="hdr">
   <div class="wrap nav">
     <a href="#top" class="brand">
@@ -386,6 +374,10 @@
       <a href="#how" class="link" data-i18n="nav.how">Cómo funciona</a>
       <a href="#precios" class="link" data-i18n="nav.pricing">Precios</a>
       <a href="#faq" class="link" data-i18n="nav.faq">FAQ</a>
+      <div class="lang" role="group" aria-label="Idioma / Language">
+        <button type="button" data-lang="es" aria-pressed="false">ES</button>
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      </div>
       <a href="#demo" class="btn btn-primary" data-i18n="nav.cta">Agendar demo</a>
     </nav>
   </div>
@@ -869,11 +861,11 @@
     try { localStorage.setItem('atlas-lang', LANG); } catch (_) {}
   };
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
-  let initial = 'es';
+  // Language priority: saved preference > browser language > English fallback
+  let initial = (navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en';
   try {
     const saved = localStorage.getItem('atlas-lang');
     if (saved === 'en' || saved === 'es') initial = saved;
-    else if ((navigator.language || '').toLowerCase().startsWith('en')) initial = 'en';
   } catch (_) {}
   setLang(initial);
 
