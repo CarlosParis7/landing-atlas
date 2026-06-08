@@ -380,6 +380,31 @@
   .chat-fab.hidden { opacity: 0; transform: scale(.85) translateY(10px); pointer-events: none; }
   @media (max-width: 480px) { .chat-fab .fab-label { display: none; } .chat-fab { padding: 14px; } }
 
+  /* Proactive nudge bubble */
+  .chat-nudge {
+    position: fixed; z-index: var(--z-toast); right: clamp(16px, 3vw, 26px); bottom: calc(clamp(16px, 3vw, 26px) + 62px);
+    max-width: 232px; background: var(--surface); color: var(--ink); border: 1px solid var(--line);
+    border-radius: 14px; border-bottom-right-radius: 5px; padding: 12px 30px 12px 14px; box-shadow: var(--shadow-lg);
+    font-size: 0.88rem; line-height: 1.4; opacity: 0; transform: translateY(8px) scale(.96); transform-origin: bottom right;
+    pointer-events: none; transition: opacity .3s var(--ease), transform .3s var(--ease); cursor: pointer;
+  }
+  .chat-nudge.show { opacity: 1; transform: none; pointer-events: auto; }
+  .chat-nudge b { color: var(--accent-press); }
+  .chat-nudge .nx { position: absolute; top: 6px; right: 7px; width: 18px; height: 18px; border: none; background: none; color: var(--ink-3); cursor: pointer; border-radius: 50%; display: grid; place-items: center; }
+  .chat-nudge .nx:hover { color: var(--ink); background: var(--surface-2); }
+  .chat-nudge .nx svg { width: 12px; height: 12px; }
+
+  /* Source highlight when a citation is clicked */
+  mark.src.flash { animation: src-flash 1.9s var(--ease); }
+  @keyframes src-flash {
+    0% { background: var(--accent-mark); }
+    18% { background: oklch(0.82 0.16 150); box-shadow: 0 0 0 6px oklch(0.72 0.17 150 / 0.22); }
+    100% { background: var(--accent-mark); box-shadow: 0 0 0 0 transparent; }
+  }
+  @media (prefers-reduced-motion: reduce) { mark.src.flash { animation: none; } }
+  .msg .cite.clickable { cursor: pointer; transition: background-color .15s var(--ease); }
+  .msg .cite.clickable:hover { background: oklch(0.62 0.15 162 / 0.18); }
+
   .chat-panel {
     position: fixed; right: clamp(12px, 3vw, 26px); bottom: clamp(12px, 3vw, 26px); z-index: var(--z-toast);
     width: min(384px, calc(100vw - 24px)); height: min(580px, calc(100dvh - 96px));
@@ -403,14 +428,22 @@
   .chat-head .x svg { width: 17px; height: 17px; }
 
   .chat-body { flex: 1; overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; background: var(--surface-2); }
-  .msg { max-width: 84%; font-size: 0.92rem; line-height: 1.5; padding: 11px 14px; border-radius: 14px; }
-  .msg.bot { align-self: flex-start; background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 5px; color: var(--ink); box-shadow: var(--shadow-sm); }
-  .msg.user { align-self: flex-end; background: var(--accent); color: var(--ink-on-accent); border-bottom-right-radius: 5px; }
+  .msg-row { display: flex; flex-direction: column; max-width: 84%; animation: msg-in .34s var(--ease) both; }
+  .msg-row.bot { align-self: flex-start; align-items: flex-start; }
+  .msg-row.user { align-self: flex-end; align-items: flex-end; }
+  @keyframes msg-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .msg-row { animation: none; } }
+  .msg { font-size: 0.92rem; line-height: 1.5; padding: 11px 14px; border-radius: 14px; }
+  .msg.bot { background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 5px; color: var(--ink); box-shadow: var(--shadow-sm); }
+  .msg.user { background: var(--accent); color: var(--ink-on-accent); border-bottom-right-radius: 5px; }
+  .msg-time { font-size: 0.68rem; color: var(--ink-3); margin: 4px 4px 0; }
   .msg .cite { display: inline-flex; align-items: center; gap: 6px; margin-top: 9px; background: var(--accent-soft); color: var(--accent-press); font-size: 0.74rem; font-weight: 600; padding: 5px 9px; border-radius: 8px; border: 1px solid oklch(0.62 0.15 162 / 0.2); }
   .msg .cite svg { width: 12px; height: 12px; flex-shrink: 0; }
-  .chat-typing { align-self: flex-start; display: inline-flex; gap: 4px; padding: 13px 15px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; border-bottom-left-radius: 5px; }
+  .chat-typing { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 11px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; border-bottom-left-radius: 5px; box-shadow: var(--shadow-sm); }
+  .chat-typing .dots { display: inline-flex; gap: 4px; }
   .chat-typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-3); animation: typing 1.2s var(--ease) infinite; }
   .chat-typing i:nth-child(2) { animation-delay: .15s; } .chat-typing i:nth-child(3) { animation-delay: .3s; }
+  .chat-typing .tlabel { font-size: 0.78rem; color: var(--ink-3); font-style: italic; }
   @keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-4px); opacity: 1; } }
 
   .chat-suist { padding: 0 16px 8px; display: flex; flex-wrap: wrap; gap: 7px; background: var(--surface-2); }
@@ -778,6 +811,10 @@
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
   <span class="fab-label" data-i18n="chat.fab">Pruébalo</span>
 </button>
+<div class="chat-nudge" id="chatNudge" role="button" tabindex="0" aria-label="Abrir demo de Atlas">
+  <button class="nx" id="nudgeX" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <span data-i18n-html="chat.nudge">👋 <b>Pregúntame</b> sobre un documento y te respondo con la página exacta.</span>
+</div>
 
 <div class="chat-panel" id="chatPanel" role="dialog" aria-modal="false" aria-label="Demo de Atlas Copilot">
   <div class="chat-head">
@@ -909,7 +946,8 @@
     'foot.cta': 'Book a demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
     'foot.product': 'Product', 'foot.why': 'Why Atlas', 'foot.company': 'Company', 'foot.contact': 'Contact',
     'foot.rights': 'All rights reserved.', 'foot.made': 'Built by ByteLabs · Support in English and Spanish',
-    'chat.fab': 'Try it', 'chat.status': 'Demo · answers from a sample handbook', 'chat.ph': 'Type your question…'
+    'chat.fab': 'Try it', 'chat.status': 'Demo · answers from a sample handbook', 'chat.ph': 'Type your question…',
+    'chat.nudge': '👋 <b>Ask me</b> about a document and I’ll answer with the exact page.'
   };
   const ERRORS = {
     es: { name: 'Dinos tu nombre.', company: 'Indica el nombre de tu empresa.', emailEmpty: 'Necesitamos un email para responderte.', emailBad: 'Revisa el email: parece incompleto.' },
@@ -1018,6 +1056,7 @@
         cite: 'Manual_RRHH_2026.pdf',
         fallback: 'En el demo solo cargué un manual de RRHH de ejemplo, así que esa no la tengo. Con tus documentos reales, Atlas responde igual de preciso. ¿Agendamos una demo?',
         cta: 'Agendar una demo',
+        steps: ['Buscando en el documento…', 'Leyendo la fuente…', 'Redactando la respuesta…'],
         qs: [
           { q: '¿Cuántos días de vacaciones tengo?', a: 'Tienes <b>15 días hábiles</b> de vacaciones al año, que suben a <b>20 tras 5 años</b> de antigüedad. Se acumulan mensualmente.', p: 'pág. 12' },
           { q: '¿Puedo arrastrar días al año siguiente?', a: 'Sí. Los días no tomados se pueden arrastrar hasta un <b>máximo de 10</b> al período siguiente, con autorización de tu líder directo.', p: 'pág. 12' },
@@ -1029,6 +1068,7 @@
         cite: 'HR_Handbook_2026.pdf',
         fallback: "In this demo I only loaded a sample HR handbook, so I don't have that one. With your real documents, Atlas answers just as precisely. Shall we book a demo?",
         cta: 'Book a demo',
+        steps: ['Searching the document…', 'Reading the source…', 'Drafting the answer…'],
         qs: [
           { q: 'How many vacation days do I get?', a: 'You get <b>15 business days</b> of vacation per year, rising to <b>20 after 5 years</b> of tenure. They accrue monthly.', p: 'p. 12' },
           { q: 'Can I carry days into next year?', a: 'Yes. Unused days carry over up to a <b>maximum of 10</b> into the next period, with your direct manager’s approval.', p: 'p. 12' },
@@ -1041,11 +1081,26 @@
     const kb = () => KB[LANG] || KB.es;
 
     const scroll = () => { body.scrollTop = body.scrollHeight; };
+    const now = () => new Date().toLocaleTimeString(LANG === 'en' ? 'en-US' : 'es-ES', { hour: '2-digit', minute: '2-digit' });
     const addMsg = (who, html) => {
-      const d = document.createElement('div');
-      d.className = 'msg ' + who; d.innerHTML = html; body.appendChild(d); scroll(); return d;
+      const row = document.createElement('div');
+      row.className = 'msg-row ' + who;
+      row.innerHTML = '<div class="msg ' + who + '">' + html + '</div><div class="msg-time">' + now() + '</div>';
+      body.appendChild(row); scroll();
+      // wire clickable citations -> highlight the source in the hero document
+      row.querySelectorAll('[data-src-jump]').forEach(c => c.addEventListener('click', jumpToSource));
+      return row;
     };
-    const citeChip = (p) => '<div class="cite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>' + kb().cite + ' · ' + p + '</div>';
+    const citeChip = (p) => '<div class="cite clickable" data-src-jump role="button" tabindex="0" title="Ver la fuente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>' + kb().cite + ' · ' + p + '</div>';
+
+    const jumpToSource = () => {
+      const mark = document.querySelector('mark.src');
+      if (!mark) return;
+      if (window.matchMedia('(max-width: 720px)').matches) close();
+      mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      mark.classList.remove('flash'); void mark.offsetWidth; mark.classList.add('flash');
+      setTimeout(() => mark.classList.remove('flash'), 2000);
+    };
 
     const renderChips = () => {
       sug.innerHTML = '';
@@ -1057,10 +1112,19 @@
       });
     };
 
-    const typing = () => {
+    const typing = (withSteps) => {
       const t = document.createElement('div');
-      t.className = 'chat-typing'; t.innerHTML = '<i></i><i></i><i></i>'; body.appendChild(t); scroll(); return t;
+      t.className = 'chat-typing';
+      t.innerHTML = '<span class="dots"><i></i><i></i><i></i></span>' + (withSteps ? '<span class="tlabel"></span>' : '');
+      body.appendChild(t); scroll();
+      if (withSteps) {
+        const label = t.querySelector('.tlabel'), steps = kb().steps; let i = 0;
+        label.textContent = steps[0];
+        t._iv = setInterval(() => { i = (i + 1) % steps.length; label.textContent = steps[i]; }, 850);
+      }
+      return t;
     };
+    const stopTyping = (t) => { if (t && t._iv) clearInterval(t._iv); if (t) t.remove(); };
 
     const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
     const match = (text) => {
@@ -1082,15 +1146,17 @@
 
     const answer = (item) => {
       busy = true;
-      const t = typing();
+      const t = typing(true);
       setTimeout(() => {
-        t.remove();
+        stopTyping(t);
         if (item) addMsg('bot', item.a + citeChip(item.p));
-        else addMsg('bot', kb().fallback + '<div style="margin-top:10px"><a href="#demo" class="cite" style="text-decoration:none" data-chat-cta>➜ ' + kb().cta + '</a></div>');
-        const cta = body.querySelector('[data-chat-cta]');
-        if (cta) cta.addEventListener('click', close);
+        else {
+          const row = addMsg('bot', kb().fallback + '<div style="margin-top:10px"><a href="#demo" class="cite" style="text-decoration:none" data-chat-cta>➜ ' + kb().cta + '</a></div>');
+          const cta = row.querySelector('[data-chat-cta]');
+          if (cta) cta.addEventListener('click', close);
+        }
         busy = false;
-      }, 750 + Math.random() * 500);
+      }, 1400 + Math.random() * 500);
     };
 
     const ask = (text) => {
@@ -1105,7 +1171,24 @@
       setTimeout(() => { t.remove(); addMsg('bot', kb().intro); renderChips(); }, 600);
     };
 
+    /* Proactive nudge (shows once per visitor) */
+    const nudge = document.getElementById('chatNudge'), nudgeX = document.getElementById('nudgeX');
+    let nudgeTimer = null;
+    const hideNudge = () => { if (nudge) nudge.classList.remove('show'); if (nudgeTimer) clearTimeout(nudgeTimer); };
+    const maybeNudge = () => {
+      let seen = false;
+      try { seen = localStorage.getItem('atlas-nudge') === '1'; } catch (_) {}
+      if (seen || !nudge) return;
+      nudgeTimer = setTimeout(() => {
+        if (panel.classList.contains('open')) return;
+        nudge.classList.add('show');
+        try { localStorage.setItem('atlas-nudge', '1'); } catch (_) {}
+        setTimeout(() => nudge.classList.remove('show'), 9000);
+      }, 6000);
+    };
+
     const open = () => {
+      hideNudge();
       panel.classList.add('open'); fab.classList.add('hidden'); fab.setAttribute('aria-expanded', 'true');
       start(); setTimeout(() => input.focus(), 300);
     };
@@ -1115,10 +1198,16 @@
 
     fab.addEventListener('click', open);
     closeBtn.addEventListener('click', close);
+    if (nudge) {
+      nudge.addEventListener('click', (e) => { if (e.target.closest('.nx')) return; open(); });
+      nudge.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+    }
+    if (nudgeX) nudgeX.addEventListener('click', (e) => { e.stopPropagation(); hideNudge(); try { localStorage.setItem('atlas-nudge', '1'); } catch (_) {} });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && panel.classList.contains('open')) close(); });
     cForm.addEventListener('submit', (e) => { e.preventDefault(); const v = input.value.trim(); if (!v) return; input.value = ''; ask(v); });
     const see = document.getElementById('seeAnswer');
     if (see) see.addEventListener('click', (e) => { e.preventDefault(); open(); });
+    maybeNudge();
   })();
 </script>
 </body>
