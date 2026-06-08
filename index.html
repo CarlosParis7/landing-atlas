@@ -114,12 +114,8 @@
 
   /* Credential, not a generic pill: flag chip + two-line claim */
   .cred { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 28px; padding: 7px 7px 7px 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-sm); }
-  .cred .flag-sm { width: 30px; height: 30px; border-radius: 7px; overflow: hidden; display: grid; place-items: center; font-size: 16px; flex-shrink: 0; border: 1px solid var(--line); }
-  .cred .flag-sm i { display: block; }
-  .cred .flag-sm .w1 { background: oklch(1 0 0); }
-  .cred .flag-sm .b  { background: oklch(0.43 0.18 264); }
-  .cred .flag-sm .r  { background: oklch(0.55 0.2 27); }
-  .cred .flag-sm .w2 { background: oklch(1 0 0); }
+  .cred .flag-sm { width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; flex-shrink: 0; border: 1px solid var(--line); background: var(--accent-soft); color: var(--accent-press); }
+  .cred .flag-sm svg { width: 17px; height: 17px; }
   .cred .txt { display: flex; flex-direction: column; line-height: 1.25; padding-right: 6px; }
   .cred .txt b { font-size: 0.86rem; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
   .cred .txt span { font-size: 0.76rem; color: var(--ink-2); }
@@ -128,7 +124,7 @@
   h1 .em { color: var(--accent); }
   .lede { font-size: clamp(1.05rem, 1.7vw, 1.22rem); color: var(--ink-2); max-width: 46ch; margin-bottom: 30px; }
   .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
-  .hero-note { margin-top: 18px; font-size: 0.86rem; color: var(--ink-3); display: flex; align-items: center; gap: 8px; }
+  .hero-note { margin-top: 18px; font-size: 0.86rem; color: var(--ink-2); display: flex; align-items: center; gap: 8px; }
   .hero-note svg { width: 15px; height: 15px; color: var(--accent); flex-shrink: 0; }
 
   /* --- The paper --- */
@@ -211,16 +207,12 @@
   .ba-arrow svg { width: 30px; height: 30px; }
   @media (max-width: 760px) { .ba-arrow { transform: rotate(90deg); padding: 4px 0; } }
 
-  /* ---------- Local-trust strip (Panamá) ---------- */
+  /* ---------- Trust strip (global) ---------- */
   .local { padding: clamp(40px, 6vw, 64px) 0; }
   .local-inner { display: grid; grid-template-columns: auto 1fr; gap: clamp(20px, 3vw, 36px); align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: clamp(26px, 4vw, 40px); box-shadow: var(--shadow-sm); }
   @media (max-width: 680px) { .local-inner { grid-template-columns: 1fr; text-align: center; justify-items: center; } }
-  .flag { width: 76px; height: 76px; border-radius: 16px; border: 1px solid var(--line); box-shadow: var(--shadow-sm); flex-shrink: 0; overflow: hidden; display: grid; place-items: center; font-size: 40px; }
-  .flag i { display: block; }
-  .flag .w1 { background: oklch(1 0 0); }
-  .flag .b  { background: oklch(0.43 0.18 264); }   /* azul */
-  .flag .r  { background: oklch(0.55 0.2 27); }     /* rojo */
-  .flag .w2 { background: oklch(1 0 0); }
+  .flag { width: 76px; height: 76px; border-radius: 16px; border: 1px solid var(--line); box-shadow: var(--shadow-sm); flex-shrink: 0; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-press); }
+  .flag svg { width: 38px; height: 38px; }
   .local h3 { font-size: clamp(1.25rem, 2.4vw, 1.7rem); line-height: 1.15; margin-bottom: 8px; }
   .local h3 .em { color: var(--accent); }
   .local p { color: var(--ink-2); font-size: 1.02rem; max-width: 60ch; }
@@ -324,8 +316,12 @@
   .field input::placeholder, .field textarea::placeholder { color: var(--ink-3); }
   .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
   .field textarea { resize: vertical; min-height: 76px; }
+  .field input[aria-invalid="true"], .field textarea[aria-invalid="true"] { border-color: oklch(0.55 0.2 27); }
+  .field input[aria-invalid="true"]:focus, .field textarea[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px oklch(0.55 0.2 27 / 0.25); }
+  .field-error { font-size: 0.78rem; color: oklch(0.5 0.2 27); min-height: 1em; }
+  .field-error:empty { display: none; }
   form .btn-primary { margin-top: 4px; }
-  .form-note { font-size: 0.8rem; color: var(--ink-3); text-align: center; }
+  .form-note { font-size: 0.8rem; color: var(--ink-2); text-align: center; }
   .form-ok { display: none; text-align: center; padding: 22px; background: var(--accent-soft); border: 1px solid oklch(0.62 0.15 162 / 0.25); border-radius: var(--radius); color: var(--accent-press); font-weight: 600; }
 
   /* ---------- Footer ---------- */
@@ -337,11 +333,13 @@
   .foot-links a:hover { color: var(--ink); }
 
   /* ---------- Reveal (enhances visible content) ---------- */
+  /* Reveal: content is visible by default; only hidden once JS confirms
+     it will animate it in (guards against headless/no-JS blank sections). */
   @media (prefers-reduced-motion: no-preference) {
-    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
-    .reveal.in { opacity: 1; transform: none; }
-    .paper-stage { opacity: 0; transform: translateY(20px) scale(.98); transition: opacity .7s var(--ease), transform .7s var(--ease); }
-    .paper-stage.in { opacity: 1; transform: none; }
+    .js-reveal .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+    .js-reveal .reveal.in { opacity: 1; transform: none; }
+    .js-reveal .paper-stage { opacity: 0; transform: translateY(20px) scale(.98); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .js-reveal .paper-stage.in { opacity: 1; transform: none; }
   }
 </style>
 </head>
@@ -370,7 +368,7 @@
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <span class="cred">
-          <span class="flag-sm" role="img" aria-label="Global">🌐</span>
+          <span class="flag-sm" role="img" aria-label="Global"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg></span>
           <span class="txt"><b>Construido por ByteLabs</b><span>Soporte en español e inglés, en tu zona horaria</span></span>
         </span>
         <h1>Tu equipo pregunta. Tus <span class="em">documentos responden</span>.</h1>
@@ -455,7 +453,7 @@
   <section class="local">
     <div class="wrap">
       <div class="local-inner reveal">
-        <span class="flag" role="img" aria-label="Global">🌐</span>
+        <span class="flag" role="img" aria-label="Global"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg></span>
         <div>
           <h3>Una herramienta hecha para equipos de <span class="em">todo el mundo</span>.</h3>
           <p>Atlas Copilot lo construye ByteLabs. Hablas directamente con el equipo que lo desarrolla, en español o inglés y en tu misma zona horaria, sin filas de soporte impersonales. Entendemos cómo trabaja una empresa real porque somos una.</p>
@@ -677,9 +675,9 @@
         </div>
         <div>
           <form id="demoForm" novalidate>
-            <div class="field"><label for="name">Nombre</label><input type="text" id="name" name="name" autocomplete="name" placeholder="Tu nombre" required /></div>
-            <div class="field"><label for="company">Empresa</label><input type="text" id="company" name="company" autocomplete="organization" placeholder="Nombre de tu empresa" required /></div>
-            <div class="field"><label for="email">Email de trabajo</label><input type="email" id="email" name="email" autocomplete="email" placeholder="tu@empresa.com" required /></div>
+            <div class="field"><label for="name">Nombre</label><input type="text" id="name" name="name" autocomplete="name" placeholder="Tu nombre" required aria-describedby="err-name" /><span class="field-error" id="err-name"></span></div>
+            <div class="field"><label for="company">Empresa</label><input type="text" id="company" name="company" autocomplete="organization" placeholder="Nombre de tu empresa" required aria-describedby="err-company" /><span class="field-error" id="err-company"></span></div>
+            <div class="field"><label for="email">Email de trabajo</label><input type="email" id="email" name="email" autocomplete="email" placeholder="tu@empresa.com" required aria-describedby="err-email" /><span class="field-error" id="err-email"></span></div>
             <div class="field"><label for="msg">¿Qué te gustaría resolver? <span style="font-weight:400;color:var(--ink-3)">(opcional)</span></label><textarea id="msg" name="msg" placeholder="Ej: que el equipo consulte nuestras políticas internas sin perder tiempo."></textarea></div>
             <button type="submit" class="btn btn-primary">Solicitar demo</button>
             <p class="form-note">Te respondemos en menos de 24 horas hábiles.</p>
@@ -706,15 +704,46 @@
   onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
 
   if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('js-reveal');
     const io = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.14 });
     document.querySelectorAll('.reveal, .paper-stage').forEach(el => io.observe(el));
   }
 
   const form = document.getElementById('demoForm'), formOk = document.getElementById('formOk');
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const setError = (field, msg) => {
+    const input = form[field], err = document.getElementById('err-' + field);
+    err.textContent = msg || '';
+    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+  };
+  const validate = (field) => {
+    const v = form[field].value.trim();
+    if (field === 'name' && !v) return 'Dinos tu nombre.';
+    if (field === 'company' && !v) return 'Indica el nombre de tu empresa.';
+    if (field === 'email') {
+      if (!v) return 'Necesitamos un email para responderte.';
+      if (!emailRe.test(v)) return 'Revisa el email: parece incompleto.';
+    }
+    return '';
+  };
+
+  ['name', 'company', 'email'].forEach(field => {
+    form[field].addEventListener('blur', () => setError(field, validate(field)));
+    form[field].addEventListener('input', () => { if (form[field].getAttribute('aria-invalid') === 'true') setError(field, validate(field)); });
+  });
+
   form.addEventListener('submit', (ev) => {
     ev.preventDefault();
+    let firstBad = null;
+    ['name', 'company', 'email'].forEach(field => {
+      const msg = validate(field);
+      setError(field, msg);
+      if (msg && !firstBad) firstBad = form[field];
+    });
+    if (firstBad) { firstBad.focus(); return; }
+
     const n = form.name.value.trim(), c = form.company.value.trim(), e = form.email.value.trim(), m = form.msg.value.trim();
-    if (!n || !c || !e) { alert('Por favor completa nombre, empresa y email.'); return; }
     const subject = encodeURIComponent('Solicitud de demo — Atlas Copilot (' + c + ')');
     const body = encodeURIComponent('Nombre: ' + n + '\nEmpresa: ' + c + '\nEmail: ' + e + '\n\nObjetivo:\n' + (m || '(no especificado)'));
     window.location.href = 'mailto:carlosparis391@gmail.com?subject=' + subject + '&body=' + body;
