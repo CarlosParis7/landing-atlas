@@ -423,6 +423,9 @@
   .chat-head .ht b { font-size: 0.95rem; }
   .chat-head .ht span { font-size: 0.76rem; color: oklch(0.75 0.012 200); display: inline-flex; align-items: center; gap: 6px; }
   .chat-head .ht .live { width: 7px; height: 7px; border-radius: 50%; background: oklch(0.72 0.17 150); box-shadow: 0 0 0 0 oklch(0.72 0.17 150 / 0.5); animation: pulse 2.2s var(--ease) infinite; }
+  .chat-head .open-app { display: inline-flex; align-items: center; gap: 6px; background: oklch(1 0 0 / 0.1); color: inherit; font-size: 0.78rem; font-weight: 600; padding: 7px 11px; border-radius: 9px; transition: background-color .15s var(--ease); }
+  .chat-head .open-app:hover { background: oklch(1 0 0 / 0.2); }
+  .chat-head .open-app svg { width: 13px; height: 13px; }
   .chat-head .x { background: oklch(1 0 0 / 0.1); border: none; color: inherit; cursor: pointer; width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; transition: background-color .15s var(--ease); }
   .chat-head .x:hover { background: oklch(1 0 0 / 0.2); }
   .chat-head .x svg { width: 17px; height: 17px; }
@@ -821,6 +824,7 @@
   <div class="chat-head">
     <span class="ava" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v6c0 4.4 3.4 7.6 8 8 4.6-.4 8-3.6 8-8V7z"/><path d="m9 12 2 2 4-4"/></svg></span>
     <span class="ht"><b>Atlas Copilot</b><span><span class="live" aria-hidden="true"></span><span data-i18n="chat.status">Demo · responde sobre un manual de ejemplo</span></span></span>
+    <a class="open-app" href="https://ai-knowledge-copilot-web.vercel.app/login" target="_blank" rel="noopener" data-i18n-html="chat.openapp">Abrir Atlas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
     <button class="x" id="chatClose" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   </div>
   <div class="chat-body" id="chatBody" aria-live="polite"></div>
@@ -949,7 +953,8 @@
     'foot.product': 'Product', 'foot.why': 'Why Atlas', 'foot.company': 'Company', 'foot.contact': 'Contact',
     'foot.rights': 'All rights reserved.', 'foot.made': 'Built by ByteLabs · Support in English and Spanish',
     'chat.fab': 'Try it', 'chat.status': 'Demo · answers from a sample handbook', 'chat.ph': 'Type your question…',
-    'chat.nudge': '👋 <b>Ask me</b> about a document and I’ll answer with the exact page.'
+    'chat.nudge': '👋 <b>Ask me</b> about a document and I’ll answer with the exact page.',
+    'chat.openapp': 'Open Atlas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>'
   };
   const ERRORS = {
     es: { name: 'Dinos tu nombre.', company: 'Indica el nombre de tu empresa.', emailEmpty: 'Necesitamos un email para responderte.', emailBad: 'Revisa el email: parece incompleto.' },
