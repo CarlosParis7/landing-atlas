@@ -242,6 +242,18 @@
   .quote .by span { font-size: 0.83rem; color: var(--ink-3); }
   .ph-tip { text-align: center; margin-top: 22px; font-size: 0.85rem; color: var(--ink-3); }
 
+  /* ---------- Early access (founding customers) ---------- */
+  .early { background: var(--accent-soft); border: 1px solid oklch(0.62 0.15 162 / 0.25); border-radius: 22px; padding: clamp(36px, 5vw, 60px); text-align: center; max-width: 920px; margin: 0 auto; }
+  .early-badge { display: inline-flex; align-items: center; gap: 7px; background: var(--surface); color: var(--accent-press); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 6px 13px; border-radius: 999px; border: 1px solid oklch(0.62 0.15 162 / 0.25); margin-bottom: 20px; }
+  .early-badge .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 var(--accent-ring); animation: pulse 2.2s var(--ease) infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 var(--accent-ring); } 70% { box-shadow: 0 0 0 9px oklch(0.62 0.15 162 / 0); } 100% { box-shadow: 0 0 0 0 oklch(0.62 0.15 162 / 0); } }
+  @media (prefers-reduced-motion: reduce) { .early-badge .pulse { animation: none; } }
+  .early h2 { font-size: clamp(1.7rem, 3.4vw, 2.6rem); line-height: 1.1; margin-bottom: 16px; }
+  .early > p { color: var(--ink-2); font-size: 1.08rem; max-width: 58ch; margin: 0 auto 28px; }
+  .early-list { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 28px; margin-top: 30px; }
+  .early-list li { display: inline-flex; align-items: center; gap: 9px; font-size: 0.95rem; font-weight: 500; color: var(--ink); }
+  .early-list svg { width: 18px; height: 18px; color: var(--accent-press); flex-shrink: 0; }
+
   /* ---------- Pricing ---------- */
   .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
   @media (max-width: 900px) { .price-grid { grid-template-columns: 1fr; max-width: 460px; margin: 0 auto; } }
@@ -326,7 +338,7 @@
 
   /* ---------- Footer ---------- */
   footer { background: var(--ink-deep); color: oklch(0.78 0.012 200); }
-  .foot-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: clamp(28px, 4vw, 56px); padding: clamp(48px, 6vw, 72px) 0 clamp(36px, 4vw, 48px); }
+  .foot-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: clamp(28px, 4vw, 56px); padding: clamp(48px, 6vw, 72px) 0 clamp(36px, 4vw, 48px); }
   @media (max-width: 860px) { .foot-top { grid-template-columns: 1fr 1fr; gap: 36px 28px; } }
   @media (max-width: 480px) { .foot-top { grid-template-columns: 1fr; } }
   .foot-brand .brand { color: oklch(0.98 0.005 175); margin-bottom: 14px; }
@@ -556,31 +568,20 @@
     </div>
   </section>
 
-  <!-- ============ TESTIMONIALS (placeholders — reemplazar con reales) ============ -->
+  <!-- ============ EARLY ACCESS (founding customers) ============ -->
   <section class="block" id="clientes">
     <div class="wrap">
-      <div class="sec-head reveal">
-        <h2 data-i18n-html="tst.h2">Lo que dicen los equipos que ya <span class="em">no buscan a mano</span></h2>
-        <p data-i18n="tst.sub">Empresas que pusieron su conocimiento a trabajar.</p>
+      <div class="early reveal">
+        <span class="early-badge"><span class="pulse" aria-hidden="true"></span><span data-i18n="early.badge">Acceso anticipado</span></span>
+        <h2 data-i18n-html="early.h2">Sé de las primeras empresas en poner <span class="em">Atlas a trabajar</span></h2>
+        <p data-i18n="early.p">Estamos incorporando un grupo reducido de empresas fundadoras. Trabajas directo con el equipo que construye Atlas, ayudas a moldear el producto y aseguras condiciones preferenciales a largo plazo.</p>
+        <a href="#demo" class="btn btn-primary" data-i18n="early.cta">Solicitar acceso anticipado</a>
+        <ul class="early-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg> <span data-i18n="early.l1">Onboarding directo con el fundador</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg> <span data-i18n="early.l2">Precio fundador fijo</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg> <span data-i18n="early.l3">Influencia real en el roadmap</span></li>
+        </ul>
       </div>
-      <div class="quotes">
-        <figure class="quote reveal">
-          <div class="stars" aria-label="5 de 5"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg></div>
-          <blockquote>"[Testimonio real del cliente: qué problema resolvió Atlas y qué cambió en su día a día. 2–3 frases.]"</blockquote>
-          <figcaption class="by"><span class="av">__</span><div><b>[Nombre del cliente]</b><span>[Cargo · Empresa]</span></div></figcaption>
-        </figure>
-        <figure class="quote reveal">
-          <div class="stars" aria-label="5 de 5"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg></div>
-          <blockquote>"[Testimonio real: enfatiza la confianza por la cita, o el tiempo que ahorra el equipo. 2–3 frases.]"</blockquote>
-          <figcaption class="by"><span class="av">__</span><div><b>[Nombre del cliente]</b><span>[Cargo · Empresa]</span></div></figcaption>
-        </figure>
-        <figure class="quote reveal">
-          <div class="stars" aria-label="5 de 5"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg></div>
-          <blockquote>"[Testimonio real: idealmente de un sector distinto a los otros dos, para mostrar versatilidad. 2–3 frases.]"</blockquote>
-          <figcaption class="by"><span class="av">__</span><div><b>[Nombre del cliente]</b><span>[Cargo · Empresa]</span></div></figcaption>
-        </figure>
-      </div>
-      <p class="ph-tip" data-i18n="tst.tip">Marcador temporal · Pásame 2–3 testimonios reales (nombre, cargo, empresa) y los integro.</p>
     </div>
   </section>
 
@@ -687,9 +688,9 @@
         </div>
         <div>
           <form id="demoForm" novalidate>
-            <div class="field"><label for="name" data-i18n="form.name">Nombre</label><input type="text" id="name" name="name" autocomplete="name" placeholder="Tu nombre" data-i18n-placeholder="form.name.ph" required aria-describedby="err-name" /><span class="field-error" id="err-name"></span></div>
-            <div class="field"><label for="company" data-i18n="form.company">Empresa</label><input type="text" id="company" name="company" autocomplete="organization" placeholder="Nombre de tu empresa" data-i18n-placeholder="form.company.ph" required aria-describedby="err-company" /><span class="field-error" id="err-company"></span></div>
-            <div class="field"><label for="email" data-i18n="form.email">Email de trabajo</label><input type="email" id="email" name="email" autocomplete="email" placeholder="tu@empresa.com" data-i18n-placeholder="form.email.ph" required aria-describedby="err-email" /><span class="field-error" id="err-email"></span></div>
+            <div class="field"><label for="name" data-i18n="form.name">Nombre</label><input type="text" id="name" name="name" autocomplete="name" placeholder="Tu nombre" data-i18n-placeholder="form.name.ph" required aria-describedby="err-name" /><span class="field-error" id="err-name" aria-live="polite"></span></div>
+            <div class="field"><label for="company" data-i18n="form.company">Empresa</label><input type="text" id="company" name="company" autocomplete="organization" placeholder="Nombre de tu empresa" data-i18n-placeholder="form.company.ph" required aria-describedby="err-company" /><span class="field-error" id="err-company" aria-live="polite"></span></div>
+            <div class="field"><label for="email" data-i18n="form.email">Email de trabajo</label><input type="email" id="email" name="email" autocomplete="email" placeholder="tu@empresa.com" data-i18n-placeholder="form.email.ph" required aria-describedby="err-email" /><span class="field-error" id="err-email" aria-live="polite"></span></div>
             <div class="field"><label for="msg" data-i18n-html="form.msg">¿Qué te gustaría resolver? <span style="font-weight:400;color:var(--ink-3)">(opcional)</span></label><textarea id="msg" name="msg" placeholder="Ej: que el equipo consulte nuestras políticas internas sin perder tiempo." data-i18n-placeholder="form.msg.ph"></textarea></div>
             <button type="submit" class="btn btn-primary" data-i18n="form.submit">Solicitar demo</button>
             <p class="form-note" data-i18n="form.note">Te respondemos en menos de 24 horas hábiles.</p>
@@ -725,14 +726,6 @@
           <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
           <li><a href="#demo" data-i18n="nav.cta">Agendar demo</a></li>
           <li><a href="mailto:carlosparis391@gmail.com" data-i18n="foot.contact">Contacto</a></li>
-        </ul>
-      </div>
-      <div class="foot-col">
-        <h5 data-i18n="foot.legal">Legal</h5>
-        <ul>
-          <li><a href="#" data-i18n="foot.privacy">Privacidad</a></li>
-          <li><a href="#" data-i18n="foot.terms">Términos</a></li>
-          <li><a href="#" data-i18n="foot.security">Seguridad de datos</a></li>
         </ul>
       </div>
     </div>
@@ -799,8 +792,9 @@
     'how.s1.t': 'You upload your documents', 'how.s1.d': 'Manuals, policies, contracts, whatever your company already has. You upload once and Atlas handles the rest, privately.',
     'how.s2.t': 'Your team asks normally', 'how.s2.d': 'They write the question as they would to a coworker. Nothing new to learn, no tech knowledge needed.',
     'how.s3.t': 'Get the answer with its source', 'how.s3.d': 'Atlas answers using only your content and cites the exact document. Verifiable trust, not guesses.',
-    'tst.h2': 'What teams that <span class="em">no longer search by hand</span> say', 'tst.sub': 'Companies that put their knowledge to work.',
-    'tst.tip': 'Placeholder · Send me 2–3 real testimonials (name, role, company) and I’ll add them.',
+    'early.badge': 'Early access', 'early.h2': 'Be among the first companies to put <span class="em">Atlas to work</span>',
+    'early.p': 'We are onboarding a small group of founding companies. You work directly with the team building Atlas, help shape the product, and lock in preferential terms for the long run.',
+    'early.cta': 'Request early access', 'early.l1': 'Direct onboarding with the founder', 'early.l2': 'Fixed founder pricing', 'early.l3': 'Real influence on the roadmap',
     'price.h2': 'Clear plans, no surprises', 'price.sub': 'Start small and grow. Every rollout includes direct support from the team.',
     'price.t1.name': 'Starter', 'price.t1.desc': 'For a first team that wants to test the value with their documents.', 'price.t1.amt': '$79<small>/mo</small>', 'price.t1.note': 'Per team · monthly billing, cancel anytime.',
     'price.t1.f1': 'Up to a certain document volume', 'price.t1.f2': 'Answers with a verifiable citation', 'price.t1.f3': 'Per-company data isolation', 'price.t1.f4': 'Email support',
