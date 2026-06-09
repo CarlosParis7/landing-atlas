@@ -127,10 +127,10 @@
 
   /* Text-roll hover (letters flip on hover) */
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-  .roll-clip { position: relative; display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom; line-height: 1.15; }
+  .roll-clip { position: relative; display: inline-block; overflow: hidden; clip-path: inset(0); white-space: nowrap; vertical-align: bottom; line-height: 1.15; }
   .roll-top, .roll-bot { display: block; }
   .roll-bot { position: absolute; left: 0; top: 0; }
-  .roll-l { display: inline-block; transition: transform .42s var(--ease); will-change: transform; }
+  .roll-l { display: inline-block; transition: transform .42s var(--ease); }
   .roll-bot .roll-l { transform: translateY(105%); }
   a:hover .roll-top .roll-l { transform: translateY(-105%); }
   a:hover .roll-bot .roll-l { transform: translateY(0); }
@@ -967,6 +967,26 @@
     en: { name: 'Tell us your name.', company: 'Enter your company name.', emailEmpty: 'We need an email to reply to you.', emailBad: 'Check the email: it looks incomplete.' }
   };
 
+  /* ---------- Text-roll hover (vanilla) ---------- */
+  const esc = (s) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const buildRoll = (el) => {
+    const text = el.textContent.trim();
+    if (!text) return;
+    const layer = (cls) => {
+      let h = '<span class="' + cls + '">';
+      [...text].forEach((ch, i) => {
+        h += '<span class="roll-l" style="transition-delay:' + (i * 0.022).toFixed(3) + 's">' + (ch === ' ' ? '&nbsp;' : esc(ch)) + '</span>';
+      });
+      return h + '</span>';
+    };
+    el.innerHTML = '<span class="roll-clip" aria-hidden="true">' + layer('roll-top') + layer('roll-bot') + '</span><span class="sr-only">' + esc(text) + '</span>';
+  };
+  const applyRolls = () => {
+    if (window.matchMedia('(hover: hover)').matches) {
+      document.querySelectorAll('.nav-links a.link, .foot-col a').forEach(buildRoll);
+    }
+  };
+
   let LANG = 'es';
   const i18nEls = [...document.querySelectorAll('[data-i18n], [data-i18n-html], [data-i18n-placeholder]')];
   i18nEls.forEach(el => {
@@ -984,33 +1004,16 @@
     });
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === LANG)));
     try { localStorage.setItem('atlas-lang', LANG); } catch (_) {}
+    applyRolls();
   };
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
-  // Language priority: saved preference > browser language > English fallback
-  let initial = (navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en';
+  // Language priority: saved preference > Spanish default
+  let initial = 'es';
   try {
     const saved = localStorage.getItem('atlas-lang');
     if (saved === 'en' || saved === 'es') initial = saved;
   } catch (_) {}
   setLang(initial);
-
-  /* ---------- Text-roll hover (vanilla) ---------- */
-  const esc = (s) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const buildRoll = (el) => {
-    const text = el.textContent.trim();
-    if (!text) return;
-    const layer = (cls) => {
-      let h = '<span class="' + cls + '">';
-      [...text].forEach((ch, i) => {
-        h += '<span class="roll-l" style="transition-delay:' + (i * 0.022).toFixed(3) + 's">' + (ch === ' ' ? '&nbsp;' : esc(ch)) + '</span>';
-      });
-      return h + '</span>';
-    };
-    el.innerHTML = '<span class="roll-clip" aria-hidden="true">' + layer('roll-top') + layer('roll-bot') + '</span><span class="sr-only">' + esc(text) + '</span>';
-  };
-  if (window.matchMedia('(hover: hover)').matches) {
-    document.querySelectorAll('.nav-links a.link, .foot-col a').forEach(buildRoll);
-  }
 
   const form = document.getElementById('demoForm'), formOk = document.getElementById('formOk');
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
