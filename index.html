@@ -983,7 +983,7 @@
   };
   const applyRolls = () => {
     if (window.matchMedia('(hover: hover)').matches) {
-      document.querySelectorAll('.nav-links a.link, .foot-col a').forEach(buildRoll);
+      document.querySelectorAll('.foot-col a:not([data-i18n]), .nav-links a.link:not([data-i18n])').forEach(buildRoll);
     }
   };
 
@@ -1004,7 +1004,6 @@
     });
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === LANG)));
     try { localStorage.setItem('atlas-lang', LANG); } catch (_) {}
-    applyRolls();
   };
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
   // Language priority: saved preference > Spanish default
@@ -1014,6 +1013,7 @@
     if (saved === 'en' || saved === 'es') initial = saved;
   } catch (_) {}
   setLang(initial);
+  applyRolls();
 
   const form = document.getElementById('demoForm'), formOk = document.getElementById('formOk');
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
